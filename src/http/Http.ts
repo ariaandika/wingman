@@ -1,4 +1,5 @@
 import { HttpResponse, HttpRequest } from "./HttpProcess";
+export { HttpResponse, HttpRequest }
 
 export function createEvent<Locals extends {[x: string]:any}>(request: Request) {
   const req = new HttpRequest(request)
@@ -10,18 +11,17 @@ export function createEvent<Locals extends {[x: string]:any}>(request: Request) 
 }
 
 export class HttpConfig<Locals extends {[x:string]:any}> {
-  public defers = [] as ((e: HttpEvent<Locals>) => any | Promise<any>)[]
-  public transforms = [] as ((body: any, e: HttpEvent<Locals>) => any | Promise<any>)[]
+  public defers = [] as Cb<[HttpEvent<Locals>],MaybePromise<any>>[]
+  public transforms = [] as Cb<[any,HttpEvent<Locals>],MaybePromise<any>>[]
 
   public handleFound = false;
 
-  public transform(cb: (body: any, e: HttpEvent<Locals>) => any | Promise<any>) {
+  public transform(cb: Cb<[any,HttpEvent<Locals>],MaybePromise<any>>) {
     this.transforms.push(cb)
   }
 
-  public defer(cb: (e: HttpEvent<Locals>) => any) {
+  public defer(cb: Cb<[HttpEvent<Locals>],MaybePromise<any>>) {
     this.defers.push(cb)
   }
-
-}
+};
 

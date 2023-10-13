@@ -1,5 +1,5 @@
 {
-  "name": "wingman",
+  "name": "@deuzo/wingman",
   "version": "0.0.1",
   "module": "src/index.ts",
   "type": "module",
@@ -8,5 +8,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "exports" : {
+    ".": "./src/index.ts"
   }
 }
