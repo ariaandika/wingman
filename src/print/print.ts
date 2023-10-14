@@ -7,7 +7,7 @@ export class Html {
    * wrap response with layout if no pr-request header exist
    */
   static use(layout?: (i: { slot: any, event: HttpEvent }) => JSX.Element) {
-    return (event: HttpEvent<{ html: HTMLConfig }>) => {
+    return (event: HttpEvent) => {
 
       event.config.transform(async (body, event) => {
         if (body instanceof H) {
@@ -50,7 +50,7 @@ export class Html {
   }
 
   /** assign header element globally */
-  static assignHeader(...headers: Elem[]) {
+  static assignHeader(...headers: (Elem | string)[]) {
     for (let i = 0, len = headers.length; i < len; i++) {
       const e = headers[i]
       if (typeof e == 'string') {

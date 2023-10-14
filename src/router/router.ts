@@ -1,13 +1,17 @@
 import type { Server } from "bun";
 import { createEvent, HttpResponse } from "../http/Http";
+import { existsSync } from "fs";
 
 const FgRed = "\x1b[31m"
 
 // MAIN
 export class Wingman<Locals extends {[x: string]: any } = {}> {
 
+  static staticAssets = 'static'
   static useMethodVerb = 'use' as const
   static server = undefined as any as Server
+
+  private static staticExist = existsSync('static');
 
   routes = [] as {
     method: string
@@ -65,6 +69,12 @@ export class Wingman<Locals extends {[x: string]: any } = {}> {
     try {
       const resultEvent = await this.runApp(event)
       if (!resultEvent.config.handleFound) {
+        if (Wingman.staticExist) {
+          const file = Bun.file(Wingman.staticAssets + event.req.path);
+          if (await file.exists()) {
+            return new Response(file)
+          }
+        }
         return resultEvent.res.notFound()
       }
       return resultEvent.res.build()
