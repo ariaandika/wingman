@@ -6,7 +6,7 @@ export class Html {
   /**
    * wrap response with layout if no pr-request header exist
    */
-  static use(layout?: (i: { slot: any, event: HttpEvent }) => JSX.Element) {
+  static use(layout?: (i: { slot: any, event: HttpEvent<{ html: HTMLConfig }> }) => JSX.Element) {
     return (event: HttpEvent) => {
 
       event.config.transform(async (body, event) => {
@@ -148,16 +148,19 @@ export class H {
         continue
       }
 
-      if (elem === '')
-        continue
+      if (elem === '') continue
 
       if (typeof elem == 'string' || typeof elem == 'number') {
         content += thisSafe ? Bun.escapeHTML(elem) : elem;
         continue
       }
 
-      if (elem === null || elem === undefined || elem === false) 
+      if (elem === null || elem === undefined || elem === false) continue
+
+      if (typeof elem == 'object') {
+        content += thisSafe ? Bun.escapeHTML(JSON.stringify(elem)) : JSON.stringify(elem);
         continue
+      }
 
       throw new Error(`child typeof "${typeof elem}", unimplemented`);
     }
