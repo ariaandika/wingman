@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "H.e",
+    "jsxFragmentFactory": "H.F",
+    "types": [ "./src/types/register.d.ts" ]
+  }
+}

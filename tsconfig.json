@@ -11,12 +11,17 @@
     "strict": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
+    "jsxFactory": "H.e",
+    "jsxFragmentFactory": "H.F",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "types": [
       "bun-types" // add Bun global
     ]
-  }
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
 }
