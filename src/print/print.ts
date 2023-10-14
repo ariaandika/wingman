@@ -32,7 +32,7 @@ export class Html {
             resultBody = Html.Base({ slot: resultBody, heads })
           }
           
-          return htmlBuilder
+          return resultBody
         }
         return body
       })
