@@ -13,6 +13,7 @@
     ".": "./src/index.ts",
     "./extra": "./src/extra.ts",
     "./types": "./src/types/register.d.ts",
+    "./types/util": "./src/types.d.ts",
     "./tsconfig": "./tsconfig-jsx.json"
   }
 }

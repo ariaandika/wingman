@@ -45,23 +45,21 @@ export const Login = new Wingman()
 
 ## Todo
 
-- create form programatically
 - make specific opt in plugin for tailwind, extra scripts
 - data validation
 - expose utility types
 - make simmilar api for transform
-- handle error when client send bad json
 - add api for custom error handling
-- handle when throw a string
-- set cookie default to httpOnly and secure when production
 - make form able to include more than one
 
 ## Maybe
 
+- create form programatically
 - if a handler is not a function, its immediately sended
 - add tailwind response shortcut
 - plugin for csrf
 - plugin for jwt
+- plugin for cache
 
 
 
