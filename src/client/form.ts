@@ -20,12 +20,20 @@ async function formEvent(e: SubmitEvent) {
   
   // Body parsing
   if (include) {
-    const otherForm = query(include) as HTMLFormElement
-    let otherEntries = new FormData(otherForm).entries()
+    const includes = include.split(' ')
 
-    let ent
-    while (!(ent = otherEntries.next()).done) {
-      body.append(ent.value[0], ent.value[1])
+    for (let i = 0, len = includes.length; i < len; i++) {
+      const include = includes[i]
+
+      if (include == '') continue
+
+      const otherForm = query(include) as HTMLFormElement
+      let otherEntries = new FormData(otherForm).entries()
+
+      let ent
+      while (!(ent = otherEntries.next()).done) {
+        body.append(ent.value[0], ent.value[1])
+      }
     }
   }
 

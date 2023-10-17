@@ -47,10 +47,8 @@ export const Login = new Wingman()
 
 - make specific opt in plugin for tailwind, extra scripts
 - data validation
-- expose utility types
 - make simmilar api for transform
 - add api for custom error handling
-- make form able to include more than one
 
 ## Maybe
 
