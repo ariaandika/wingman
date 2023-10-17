@@ -29,6 +29,8 @@ export class Cookie {
       const opt = this.valueOpt[key]
       let Opt
       if (opt) {
+        opt.http ??= true
+        opt.secure ??= production
         const { expires, http, path, domain, maxage, secure } = opt
         Opt = 
           (expires  ? `; Expires=${expires}`:'') +
