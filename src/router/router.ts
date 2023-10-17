@@ -83,13 +83,16 @@ export class Wingman<Locals extends {[x: string]: any } = {}> {
         return err
       } else if (err instanceof HttpResponse) {
         return err.build()
+      } else if (typeof err == 'string' || typeof err == 'number') {
+        event.res.body = err
+        return event.res.build()
       } else if (err == undefined || err == null) {
         return event.res.build()
       } else {
         console.log(FgRed + '%s\x1b[0m', "[ERROR]");
         console.error(err)
         console.log(FgRed + '%s\x1b[0m', "[/ERROR]");
-        return new Response('500 Internal Server Error',{ status: 500, statusText: "<h1>Internal Server Error</h1>", headers: {"content-type": "text/html"} })
+        return new Response('500 Internal Server Error',{ status: 500, headers: {"content-type": "text/html"} })
       }
     }
   }
@@ -131,16 +134,21 @@ export class Wingman<Locals extends {[x: string]: any } = {}> {
 
       if (event.req.request.method.toLowerCase() == 'post') {
         if (event.req.headers.get('Content-Type')) {
-          const body = event.req.headers.get('Content-Type') == 'application/json' ?
-            await event.req.request.json() :
-            Object.fromEntries(await event.req.request.formData())
+          try {
+            const body = event.req.headers.get('Content-Type') == 'application/json' ?
+              await event.req.request.json() :
+              Object.fromEntries(await event.req.request.formData())
 
-          event.req.body = body
+            event.req.body = body
+          } catch (error) {
+            event.res.status = 400
+            throw undefined
+          }
         } else {
           event.res.status = 400
           throw undefined
         }
-      }      
+      }
 
       for (let i = 0, len = parentUseHandles.length; i < len; i++) {
         Object.assign(event.locals, await parentUseHandles[i](event))
@@ -149,16 +157,19 @@ export class Wingman<Locals extends {[x: string]: any } = {}> {
       for (let i = 0, len = useHandles.length; i < len; i++) {
         Object.assign(event.locals, await useHandles[i](event))
       }
-
-      // for (let i = 0, len = event.config.defers.length; i < len; i++) {
-      //   Object.assign(event, await event.config.defers[i](event))
-      // }
       
-
-      event.res.body = await handle(event)
+      /** MAIN HANDLER */{
+        const result = await handle(event)
+        if (result === undefined || result === null) { } else {
+          event.res.body = result
+        }
+      }
 
       for (let i = 0, len = event.config.transforms.length; i < len; i++) {
-        event.res.body = await event.config.transforms[i](event.res.body,event)
+        const result = await event.config.transforms[i](event.res.body,event)
+        if (result === undefined || result === null) { } else {
+          event.res.body = result
+        }
       }
 
       event.config.handleFound = true
