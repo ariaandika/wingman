@@ -81,7 +81,6 @@ export class H {
     if (this.tag === undefined) {
       return H.childResolution.call(this, thisSafe, '')
     }
-
     // COMPONENT
     if (typeof this.tag == 'function') {
       const app = this.attrs ?? {}
@@ -163,6 +162,10 @@ export class H {
       }
 
       throw new Error(`child typeof "${typeof elem}", unimplemented`);
+    }
+
+    if (this.tag === undefined) {
+      return content
     }
 
     return `<${this.tag}${atr}>${content}</${this.tag}>`
