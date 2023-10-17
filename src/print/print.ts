@@ -26,7 +26,11 @@ export class Html {
 
           let resultBody = await htmlBuilder.build(true)
 
-          const heads = typeof opt.heads == 'string' ? opt.heads : await (opt.heads as any as H).build(true)
+          let heads = ''
+
+          for (let i = 0, len = opt.heads.length; i < len; i++) {
+            heads += (typeof opt.heads[i] == 'string') ? opt.heads[i] : (await (opt.heads[i] as any as H).build(true))
+          }
 
           if (!event.req.headers.get('pr-request')) {
             resultBody = Html.Base({ slot: resultBody, heads })
@@ -38,7 +42,7 @@ export class Html {
       })
 
       // API
-      return { html: { heads: '' } satisfies HTMLConfig }
+      return { html: { heads: [] as (string|JSX.Element)[] } satisfies HTMLConfig }
     }
   }
 
@@ -178,7 +182,7 @@ export class H {
 }
 
 type HTMLConfig = {
-  heads: string | JSX.Element
+  heads: (string | JSX.Element)[]
 }
 
 export type HTMLUserConfig = {
